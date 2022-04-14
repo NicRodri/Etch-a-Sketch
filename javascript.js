@@ -60,8 +60,14 @@ function isDrawing(){
 function draw(){  
     grid(length);
     isDrawing();
-
+    button = document.getElementById("clear");
     boxes = document.querySelectorAll(".square");
+
+    button.addEventListener("click", (e) =>{
+        boxes.forEach((box) => {
+            box.style.backgroundColor = "white";
+        });
+    });
 
     boxes.forEach((box)=> {
         box.addEventListener("mousemove", drawFunction);

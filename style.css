@@ -17,3 +17,8 @@
     padding: 0px;
     border: solid black 1px;
 }
+#clear{
+    display: flex;
+    margin: 15px auto;
+    padding: 10px 20px;
+}
