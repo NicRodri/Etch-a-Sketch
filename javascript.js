@@ -1,13 +1,21 @@
 const container = document.getElementById('grid');
 let drawing = false;
+let length = 16;
+
+function pixelSize(length){
+    let pixel = 0;
+    let gridSide = 544;
+    pixel = (gridSide/length) -2;
+    return String(pixel);
+}
 //Used to create a single square in the grid
 function square(...id){
     const div = document.createElement('div');
     const row = document.getElementById(id[1]);
     div.setAttribute('class', id[0]);
     div.classList.add('square');
-    div.style.width = "16px";
-    div.style.height = "16px";
+    div.style.width = pixelSize(length)+"px";
+    div.style.height = pixelSize(length)+"px";
     row.appendChild(div);
     
 }
@@ -50,7 +58,7 @@ function isDrawing(){
 }
 //The function that builds and draws the whole program
 function draw(){  
-    grid(16);
+    grid(length);
     isDrawing();
 
     boxes = document.querySelectorAll(".square");
