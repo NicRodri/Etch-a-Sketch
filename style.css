@@ -1,0 +1,13 @@
+#grid{
+    display: flex;
+    flex-direction: column;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+}
+.square{
+    margin: 0px;
+    padding: 0px;
+    border: solid black 1px;
+}
