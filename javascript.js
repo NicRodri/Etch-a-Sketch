@@ -2,6 +2,7 @@ const container = document.getElementById('grid');
 let drawing = false;
 let length = 16;
 
+//Used to calculate the size the squares should be so that the overall grid doesnt change in size
 function pixelSize(length){
     let pixel = 0;
     let gridSide = 544;
@@ -35,7 +36,7 @@ function grid(length){
         row(length, "row" + String(i));
     }
 }
-
+//Used to fill in each indivdual square
 function drawFunction(event){
     console.log(event.type);
     console.log(drawing);
@@ -56,10 +57,38 @@ function isDrawing(){
     });
     
 }
+//Used to remove the grid for the slider when slider is used
+function removeGrid(){
+    while (container.firstChild){
+        container.firstChild.remove();
+    }
+}
+//Used to allow a change in size to the grid
+function slider(){
+
+    let slider = document.getElementById("myRange");
+    let output = document.getElementById("output");
+    
+    output.innerHTML = slider.value;
+
+    slider.oninput = () =>{
+        output.innerHTML = slider.value;  
+        length = output.textContent;
+        removeGrid();
+        draw();  
+    }
+
+}
 //The function that builds and draws the whole program
-function draw(){  
+function draw(){ 
+
+    //Creates the grid
     grid(length);
+    //Allows for slider to interact with grid
+    slider();
+    //Checks to see if you are drawing
     isDrawing();
+
     button = document.getElementById("clear");
     boxes = document.querySelectorAll(".square");
 
