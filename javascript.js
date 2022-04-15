@@ -5,7 +5,7 @@ let length = 16;
 //Used to calculate the size the squares should be so that the overall grid doesnt change in size
 function pixelSize(length){
     let pixel = 0;
-    let gridSide = 544;
+    let gridSide = 600;
     pixel = (gridSide/length) -2;
     return String(pixel);
 }
