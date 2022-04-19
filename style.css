@@ -1,3 +1,7 @@
+body{
+    background-color: azure;
+}
+
 .textCenter{
     text-align: center;
 }
@@ -16,6 +20,13 @@
     margin: 0px;
     padding: 0px;
     border: solid black 1px;
+}
+.slidecontainer{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
 }
 #clear{
     display: flex;

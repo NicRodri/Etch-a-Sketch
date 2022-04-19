@@ -1,5 +1,6 @@
 const container = document.getElementById('grid');
 let drawing = false;
+let clicked = "none";
 let length = 16;
 
 //Used to calculate the size the squares should be so that the overall grid doesnt change in size
@@ -17,6 +18,7 @@ function square(...id){
     div.classList.add('square');
     div.style.width = pixelSize(length)+"px";
     div.style.height = pixelSize(length)+"px";
+    div.style.backgroundColor = "white";
     row.appendChild(div);
     
 }
@@ -38,11 +40,19 @@ function grid(length){
 }
 //Used to fill in each indivdual square
 function drawFunction(event){
-    console.log(event.type);
-    console.log(drawing);
-    if(drawing){
+    //console.log(clicked);
+    if(drawing&&clicked=="black"){
         this.style.backgroundColor = "black";
-    }    
+    } 
+    else if(drawing&&clicked=="random"){
+        let r = Math.random()*256;
+        let g = Math.random()*256;
+        let b = Math.random()*256;
+        this.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+    }   
+    else if(drawing&&clicked=="gradient"){
+        console.log(this.style.backgroundColor);
+    }
 }
 //Checks to see if you are drawing or not and updates the global variable drawing
 function isDrawing(){    
@@ -69,14 +79,17 @@ function slider(){
     let slider = document.getElementById("myRange");
     let output = document.getElementById("output");
     
-    output.innerHTML = slider.value;
+    output.innerHTML = String(slider.value) + " x " + String(slider.value);
 
     slider.oninput = () =>{
-        output.innerHTML = slider.value;  
-        length = output.textContent;
+        output.innerHTML = String(slider.value) + " x " + String(slider.value);  
+        length = slider.value;
         removeGrid();
         draw();  
     }
+
+}
+function actionListener(){
 
 }
 //The function that builds and draws the whole program
@@ -91,19 +104,64 @@ function draw(){
 
     button = document.getElementById("clear");
     boxes = document.querySelectorAll(".square");
+    random = document.getElementById("random");
+    black = document.getElementById("black");
+    percent = document.getElementById("percent");
 
+    //Checks to see if you click on the clear button and resets grid if you do
     button.addEventListener("click", (e) =>{
         boxes.forEach((box) => {
             box.style.backgroundColor = "white";
         });
     });
-
-    boxes.forEach((box)=> {
-        box.addEventListener("mousemove", drawFunction);
-        box.addEventListener("mousedown", (e) =>{
-            box.style.backgroundColor = "black";
+    //Random button is pressed which allows for random colours
+    random.addEventListener("click", (e) =>{
+        clicked = "random";
+        boxes.forEach((box)=> {
+            box.addEventListener("mousemove", drawFunction);
+            box.addEventListener("mousedown", (e) =>{
+                let r = Math.random()*256;
+                let g = Math.random()*256;
+                let b = Math.random()*256;
+                box.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+            });
+        }); 
+    });
+    percent.addEventListener("click", (e)=>{
+        clicked = "gradient";
+        let colour = 255;
+        boxes.forEach((box)=> {
+            box.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
+            box.addEventListener("mousemove", drawFunction);
+            box.addEventListener("mousedown", (e) =>{
+                
+                colour = box.style.backgroundColor;
+                console.log(colour);
+                console.log(colour.replace(/rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})[^\)]/g,''));
+                console.log(colour.replace(/([^\d{1,3}])/g,''));
+                //console.log(colour.replace(/[\(|\)|,]/g,''));
+                //box.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
+                colour = colour -"rgb(25.5,25.5,25.5)";
+                console.log(colour);
+                box.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
+            });
+        }); 
+    });
+    //Used to switch colour back to black
+    black.addEventListener("click", (e) =>{
+        clicked = "black";
+        boxes.forEach((box)=> {
+            
+            box.addEventListener("mousemove", drawFunction);
+            box.addEventListener("mousedown", (e) =>{
+                box.style.backgroundColor = "black";
+            });
         });
     });
+    //Used to fill in the squares with black if grid is interacted with. (On by default)
+
+    
+
 
 }
 
