@@ -42,7 +42,7 @@ function grid(length){
 function drawFunction(event){
     //console.log(clicked);
     if(drawing&&clicked=="black"){
-        this.style.backgroundColor = "black";
+        this.style.backgroundColor = "rgb(" + 0 + "," + 0 + "," + 0 + ")";
     } 
     else if(drawing&&clicked=="random"){
         let r = Math.random()*256;
@@ -52,6 +52,16 @@ function drawFunction(event){
     }   
     else if(drawing&&clicked=="gradient"){
         console.log(this.style.backgroundColor);
+        colour = this.style.backgroundColor;
+        let numberPattern = /\d+/g;
+        let rgbValueStr = colour.match(numberPattern);
+        let rgbValueNum = [];
+        for(let i=0; i<rgbValueStr.length; i++){
+            rgbValueNum.push(Number(rgbValueStr[i]));
+        }
+        console.log(rgbValueNum);
+        colour = rgbValueNum[0] - 25.5;
+        this.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
     }
 }
 //Checks to see if you are drawing or not and updates the global variable drawing
@@ -89,7 +99,7 @@ function slider(){
     }
 
 }
-function actionListener(){
+function rgbValue1(){
 
 }
 //The function that builds and draws the whole program
@@ -127,22 +137,24 @@ function draw(){
             });
         }); 
     });
+    //Allow for gradual 10% black increase
     percent.addEventListener("click", (e)=>{
         clicked = "gradient";
         let colour = 255;
         boxes.forEach((box)=> {
             box.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
-            box.addEventListener("mousemove", drawFunction);
+            box.addEventListener("mouseenter", drawFunction);
             box.addEventListener("mousedown", (e) =>{
                 
                 colour = box.style.backgroundColor;
-                console.log(colour);
-                console.log(colour.replace(/rgb\((\d{1,3}), (\d{1,3}), (\d{1,3})[^\)]/g,''));
-                console.log(colour.replace(/([^\d{1,3}])/g,''));
-                //console.log(colour.replace(/[\(|\)|,]/g,''));
-                //box.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
-                colour = colour -"rgb(25.5,25.5,25.5)";
-                console.log(colour);
+                let numberPattern = /\d+/g;
+                let rgbValueStr = colour.match(numberPattern);
+                let rgbValueNum = [];
+                for(let i=0; i<rgbValueStr.length; i++){
+                    rgbValueNum.push(Number(rgbValueStr[i]));
+                }
+                console.log(rgbValueNum);
+                colour = rgbValueNum[0] - 25.5;
                 box.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
             });
         }); 
@@ -154,7 +166,7 @@ function draw(){
             
             box.addEventListener("mousemove", drawFunction);
             box.addEventListener("mousedown", (e) =>{
-                box.style.backgroundColor = "black";
+                box.style.backgroundColor = "rgb(" + 0 + "," + 0 + "," + 0 + ")";
             });
         });
     });
