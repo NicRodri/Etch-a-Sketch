@@ -21,15 +21,29 @@ body{
     padding: 0px;
     border: solid black 1px;
 }
-.slidecontainer{
-    margin-top: 30px;
+#btnSlideContainer{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    
 }
+.buttonContainer{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+.slideContainer{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+
 #clear{
     display: flex;
-    margin: 15px auto;
+    margin: 20px auto;
     padding: 10px 20px;
 }
