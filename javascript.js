@@ -1,6 +1,6 @@
 const container = document.getElementById('grid');
 let drawing = false;
-let clicked = "none";
+let clicked = "black";
 let length = 16;
 
 //Used to calculate the size the squares should be so that the overall grid doesnt change in size
@@ -38,53 +38,51 @@ function grid(length){
         row(length, "row" + String(i));
     }
 }
-//Used to fill in each indivdual square
-function drawFunction(event){
-    if(drawing&&clicked=="black"){
-        this.style.backgroundColor = "rgb(" + 0 + "," + 0 + "," + 0 + ")";
-    } 
-    else if(drawing&&clicked=="random"){
+//Used to simplify the colour setup to reduce duplicate code
+function colorSetup(colour){
+    if(clicked == "random"){
         let r = Math.random()*256;
         let g = Math.random()*256;
         let b = Math.random()*256;
-        this.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
-    }   
-    else if(drawing&&clicked=="gradient"){
-        console.log(this.style.backgroundColor);
-        let colour = this.style.backgroundColor;
+        let rgb = [r, g, b];
+        return rgb;
+    }
+    else if(clicked == "gradient"){
         let numberPattern = /\d+/g;
         let rgbValueStr = colour.match(numberPattern);
         let rgbValueNum = [];
         for(let i=0; i<rgbValueStr.length; i++){
             rgbValueNum.push(Number(rgbValueStr[i]));
         }
-        console.log(rgbValueNum);
         colour = rgbValueNum[0] - 25.5;
+        return colour;
+    }
+}
+//Used to fill in each indivdual square when mousedown and moving
+function drawFunction(e){
+    if(drawing&&clicked=="black"){
+        this.style.backgroundColor = "rgb(" + 0 + "," + 0 + "," + 0 + ")";
+    } 
+    else if(drawing&&clicked=="random"){
+        let rgb = colorSetup();
+        this.style.backgroundColor = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
+    }   
+    else if(drawing&&clicked=="gradient"){
+        let colour = colorSetup(this.style.backgroundColor);
         this.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
     }
 }
-
+//Used to fill one square only if mousedown
 function drawMouseDown(e){
     if(clicked=="black"){
         this.style.backgroundColor = "rgb(" + 0 + "," + 0 + "," + 0 + ")";
     } 
     else if(clicked=="random"){
-        let r = Math.random()*256;
-        let g = Math.random()*256;
-        let b = Math.random()*256;
-        this.style.backgroundColor = "rgb(" + r + "," + g + "," + b + ")";
+        let rgb = colorSetup();
+        this.style.backgroundColor = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
     }   
     else if(clicked=="gradient"){
-        console.log(this.style.backgroundColor);
-        let colour = this.style.backgroundColor;
-        let numberPattern = /\d+/g;
-        let rgbValueStr = colour.match(numberPattern);
-        let rgbValueNum = [];
-        for(let i=0; i<rgbValueStr.length; i++){
-            rgbValueNum.push(Number(rgbValueStr[i]));
-        }
-        console.log(rgbValueNum);
-        colour = rgbValueNum[0] - 25.5;
+        let colour = colorSetup(this.style.backgroundColor);
         this.style.backgroundColor = "rgb(" + colour + "," + colour + "," + colour + ")";
     }
 }
@@ -124,30 +122,29 @@ function slider(){
     }
 
 }
-function randomColor(e){
-    clicked = "random";
-
+//Waits to see when drawing and draws when event occurs
+function drawEvents(){
     boxes.forEach((box)=> {
         box.addEventListener("mouseenter", drawFunction);
         box.addEventListener("mousedown", drawMouseDown);
     }); 
 }
+//Sets the color to random
+function randomColor(e){
+    clicked = "random";
+    drawEvents();
+}
+//Sets the color to black
 function blackColor(e){
     clicked = "black";
-
-    boxes.forEach((box)=> {
-        box.addEventListener("mouseenter", drawFunction);
-        box.addEventListener("mousedown", drawMouseDown);
-    });
+    drawEvents();
 }
+//Sets the color to increases in black percentage
 function percentColor(e){
     clicked = "gradient";
-
-    boxes.forEach((box)=> {
-        box.addEventListener("mouseenter", drawFunction);
-        box.addEventListener("mousedown",  drawMouseDown);
-    });
+    drawEvents();
 }
+
 //The function that builds and draws the whole program
 function draw(){ 
 
@@ -170,14 +167,14 @@ function draw(){
             box.style.backgroundColor = "rgb(" + 255 + "," + 255 + "," + 255 + ")";;
         });
     });
+    //Allows you to draw in black by default.
+    drawEvents();
     //Random button is pressed which allows for random colours
     random.addEventListener("click", randomColor);
     //Allow for gradual 10% black increase
     percent.addEventListener("click", percentColor);
     //Used to switch colour back to black
     black.addEventListener("click", blackColor);
-    //Used to fill in the squares with black if grid is interacted with. (On by default)
-
 }
 
 draw();
